@@ -62,6 +62,7 @@ def show_basic_info(df):
                 st.subheader(f"Price: ${row['current_price']:.2f}")
                 st.markdown(f"Market Cap: ${row['market_cap']:,}")
                 st.markdown(f"24H Change: {row['price_change_percentage_24h']:.2f}%")
+
                 st.subheader("Market Stats")
                 st.markdown(f"Volume (24H): ${row['total_volume']:,}")
                 st.markdown(f"High (24H): ${row['high_24h']:.2f}")
@@ -70,7 +71,8 @@ def show_basic_info(df):
                 model, latest_features = train_model(df, row['symbol'])
                 if model is not None and latest_features is not None:
                     predicted_price = model.predict(latest_features)[0]
-                    st.markdown(f"Predicted Price (next): ${predicted_price:.2f}")
+                    st.subheader("📈 Predicted Price (Next 1 Hour)")
+                    st.markdown(f"💰 **${predicted_price:.2f}**")
 
             with col2:
                 st.subheader("Historical Price Chart")
@@ -89,6 +91,7 @@ def show_basic_info(df):
                 st.pyplot(fig)
 
         st.markdown("---")
+
 
 def cumulative_graph(df):
     st.title("Cumulative Cryptocurrency Price Chart")
