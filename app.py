@@ -7,8 +7,6 @@ from ml_models.ml_model import train_model
 import numpy as np
 import hashlib
 
-# ----------------- Auth Helpers ------------------ #
-
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
@@ -33,8 +31,6 @@ def login_user(username, password):
     data = c.fetchone()
     conn.close()
     return data
-
-# ----------------- App Core ------------------ #
 
 def fetch_data():
     try:
@@ -71,11 +67,10 @@ def show_basic_info(df):
                 st.markdown(f"High (24H): ${row['high_24h']:.2f}")
                 st.markdown(f"Low (24H): ${row['low_24h']:.2f}")
 
-                model, latest_time = train_model(df, row['symbol'])
-                if model:
-                    future_time = [[latest_time + 3600]]
-                    predicted_price = model.predict(future_time)[0]
-                    st.markdown(f"Predicted Price (1h later): ${predicted_price:.2f}")
+                model, latest_features = train_model(df, row['symbol'])
+                if model is not None and latest_features is not None:
+                    predicted_price = model.predict(latest_features)[0]
+                    st.markdown(f"Predicted Price (next): ${predicted_price:.2f}")
 
             with col2:
                 st.subheader("Historical Price Chart")
